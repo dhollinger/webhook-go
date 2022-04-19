@@ -9,6 +9,11 @@ import (
 	"github.com/voxpupuli/webhook-go/lib/orchestrators"
 )
 
+// Grab the ChatOps configuration from the config package and
+// setup variable of type chatops.ChatOps and fill it with data
+// from the configuration.
+//
+// This returns a reference to a chatops.ChatOps struct
 func chatopsSetup() *chatops.ChatOps {
 	conf := config.GetConfig().ChatOps
 	c := chatops.ChatOps{
@@ -44,6 +49,14 @@ func execute(cmd []string) (interface{}, error) {
 	return res, nil
 }
 
+// Executes r10k via orchestration tooling.
+//
+// Takes in an argument of is of type []string and passes the
+// formatted command to the Deploy function in the ochestrators
+// package.
+//
+// This function will return an interface{} containing the result
+// and an error.
 func orchestrationExec(cmd []string) (interface{}, error) {
 	command := "\""
 	for i := range cmd {
@@ -60,6 +73,11 @@ func orchestrationExec(cmd []string) (interface{}, error) {
 	return res, nil
 }
 
+// Executes r10k on the local system. This assumes that webhook-go, r10k,
+// and the puppet server are all running on the same system.
+//
+// Takes in an argument, cmd, of type []string and returns a string result
+// and error.
 func localExec(cmd []string) (string, error) {
 	args := cmd[1:]
 	command := exec.Command(cmd[0], args...)
